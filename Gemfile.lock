@@ -135,11 +135,11 @@ DEPENDENCIES
   nokogiri (~> 1.13.3)
   redcarpet (~> 3.6.0)
   rouge (~> 3.21)
-  sass
-  webrick
+  sass (~> 3.7.4)
+  webrick (~> 1.8.1)
 
 RUBY VERSION
    ruby 2.7.2p137
 
 BUNDLED WITH
-   2.2.22
+   2.4.22
