@@ -21,25 +21,31 @@ jobs:
           bundler-cache: true
       - run: bundle exec middleman build --clean --verbose
 
-      - name: Upload package
-        id: upload
-        uses: actions/upload-pages-artifact@v3
+      - name: Login to Octopus
+        uses: OctopusDeploy/login@v1
         with:
-          path: build/
+          server: ${{ secrets.OCTOPUS_SERVER_URL }}
+          service_account_id: ${{ secrets.OCTOPUS_SERVICE_ACCOUNT }}
 
-  deploy:
-    needs: build
+      - name: Create a Zip package
+        uses: OctopusDeploy/create-zip-package-action@v3
+        with:
+          package_id: "api-docs"
+          version: "0.0.1"
+          output_folder: "./packages/"
+          base_path: "./build/"
+          files: |
+            **/*.*
 
-    permissions:
-      pages: write
-      id-token: write
+      - name: Push a package to Octopus
+        uses: OctopusDeploy/push-package-action@v3
+        with:
+          packages: |
+            packages/**/*.zip
 
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to github pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Use the package
+        uses: OctopusDeploy/create-release-action@v3
+        with:
+          project: "docs-api"
+          packages: |
+            api-docs:.0.0.1
