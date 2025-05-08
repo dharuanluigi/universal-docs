@@ -38,7 +38,7 @@ jobs:
         uses: OctopusDeploy/create-zip-package-action@v3
         with:
           package_id: "api-docs"
-          version: ${{github.sha}}
+          version: "0.0.2"
           output_folder: "./packages/"
           base_path: "./build/"
           files: |
@@ -55,4 +55,4 @@ jobs:
         with:
           project: "docs-api"
           packages: |
-            api-docs:${{github.sha}}
+            api-docs:.0.0.2
