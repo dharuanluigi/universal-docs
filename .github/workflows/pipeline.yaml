@@ -12,6 +12,9 @@ jobs:
     permissions:
       id-token: write
 
+    env:
+      OCTOPUS_SPACE: "Default"
+
     steps:
       - name: Checkout the code
         id: checkout
